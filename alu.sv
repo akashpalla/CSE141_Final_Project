@@ -42,7 +42,7 @@ always_comb begin
         {rslt,sc_o} = {sc_i,inA};   //LSR
       end
       4'b1000: 
-        {rslt} = {inB}      //MOV
+        {rslt} = {inB};      //MOV
     endcase
   
 end

@@ -22,7 +22,7 @@ module top_level(
               regWrite,
               movInstr;
   wire[3:0]   ALUOp;
-  wire[2:0]   Branch;
+  wire[1:0]   Branch;
   wire[3:0]   targetLUT;
   
   
@@ -72,7 +72,8 @@ logic         sc_in,          //Driven by ALU next Cycle
     .regWrite,
     .movInstr,
     .ALUOp,
-    .Branch);
+    .Branch
+	 .targetLUT);
 
   assign rd_addrA = mach_code[7:4];
   assign rd_addrB = mach_code[3:0];
@@ -87,10 +88,10 @@ logic         sc_in,          //Driven by ALU next Cycle
               .movInstr,
               .addrA(rd_addrA),
               .addrB(rd_addrB),
-              .datA_out(datA)
+              .datA_out(datA),
               .datB_out(datB));
 
-  assign muxB = ALUSrc? immed : datB;
+//  assign muxB = ALUSrc? immed : datB;
 
   alu alu1(
     .alu_cmd(ALUOp),

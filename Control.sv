@@ -8,7 +8,7 @@ module Control #(parameter opwidth = 4, mcodebits = 9)(
                 movInstr,
   output logic[opwidth-1:0] ALUOp,
   output logic[1:0] Branch,
-  output logic[3:0] targetLUT;
+  output logic[3:0] targetLUT
   
   );	 
 
