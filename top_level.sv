@@ -9,49 +9,55 @@ module top_level(
   parameter D = 12,             // program counter width
             A = 3;         		  // ALU command bit width
  
-  wire[D-1:0] target, 			  // Driven by PC
-              prog_ctr;
+
+  wire[D-1:0] target;         //Driven by PC_LUT
+
+  wire[D-1:0] prog_ctr; 			  // Driven by PC
+  
 
   wire[8:0]   mach_code;     //Driven by Instr ROM
 
-  wire        loadVal,      //Driven by Control
-              loadAddr,
-              storeVal,
-              storeAddr,
+  wire        loadMem,      //Driven by Control
+              storeMem,
               regWrite,
               movInstr;
   wire[3:0]   ALUOp;
   wire[2:0]   Branch;
+  wire[3:0]   targetLUT;
   
   
   wire[7:0]   datA,         // Driven by RegFile 
               datB;                   
 
-
-  wire[7:0]   rslt;         //Driven by ALU
+  wire[7:0]   alu_out;         //Driven by ALU
   logic       sc_o,
-              cnd,
+              cnd_o,
               pari,
               zero;
 
- 	                    
+logic         sc_in,          //Driven by ALU next Cycle
+              cnd_in;
+  
+  wire[7:0]   mem_out;        //Driven by Data Mem
+  wire[7:0]   register_in;
+
   wire[3:0] rd_addrA, rd_adrB;    //Set by Machine code
 
+// lookup table to facilitate jumps/branches
+  PC_LUT #(.D(D))
+    pl1 (
+      .addr  (targetLUT),
+      .target);   
 
 // fetch subassembly
   PC #(.D(D)) 					  // D sets program counter width
      pc1 ( 
       .reset,
       .clk,
-      .jcnd(cnd),
+      .jcnd(cnd_in),
       .branch(Branch),
       .target,
 		  .prog_ctr);
-
-// lookup table to facilitate jumps/branches
-  PC_LUT #(.D(D))
-    pl1 (.addr  (how_high),
-         .target          );   
 
 // contains machine code
   instr_ROM ir1(
@@ -61,22 +67,21 @@ module top_level(
 // control decoder
   Control ctl1(
     .instr(mach_code),
-    .loadVal,
-    .loadAddr,
-    .storeVal,
-    .storeAddr,
+    .loadMem,
+    .storeMem,
     .regWrite,
     .movInstr,
     .ALUOp,
     .Branch);
 
-  assign cmd_type = mach_code[8:7];
-  assign rd_addrA = mach_code[6:4];
-  assign rd_addrB = mach_code[3:1];
+  assign rd_addrA = mach_code[7:4];
+  assign rd_addrB = mach_code[3:0];
+
+  assign register_in = loadMem ? mem_out : alu_out;
 
   reg_file #(.pw(3)) rf1(
               
-              .dat_in(rslt),	   // loads, most ops
+              .dat_in(register_in),	   // loads, most ops
               .clk,
               .wr_en(regWrite),
               .movInstr,
@@ -91,28 +96,33 @@ module top_level(
     .alu_cmd(ALUOp),
     .inA(datA),
     .inB(datB),
-    .sc_i(),
-    .rslt(rslt),
-    .sc_o(),
-    .cnd,
+    .sc_i(sc_in),
+    .rslt(alu_out),
+    .sc_o(sc_o),
+    .cnd(cnd_o),
     .pari,
     .zero,
   );
     
-  dat_mem dm1(.dat_in(datB)  ,  // from reg_file
-             .clk           ,
-			 .wr_en  (MemWrite), // stores
-			 .addr   (datA),
-             .dat_out());
+  dat_mem dm1(
+    .dat_in(datA)  ,  // from reg_file
+    .clk           ,
+    .wr_en  (storeMem), // stores
+    .addr   (datB),
+    .dat_out(mem_out));
 
 // registered flags from ALU
   always_ff @(posedge clk) begin
-    pariQ <= pari;
-	zeroQ <= zero;
-    if(sc_clr)
-	  sc_in <= 'b0;
-    else if(sc_en)
-      sc_in <= sc_o;
+    // pariQ <= pari;
+	  // zeroQ <= zero;
+    cnd_in <= cnd_o;
+    sc_in <= sc_o;
+
+
+    // if(sc_clr)
+	  // sc_in <= 'b0;
+    // else if(sc_en)
+    //   sc_in <= sc_o;
   end
 
   assign done = prog_ctr == 128;

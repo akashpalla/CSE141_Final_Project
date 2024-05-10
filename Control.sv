@@ -2,14 +2,13 @@
 module Control #(parameter opwidth = 4, mcodebits = 9)(
   input [mcodebits-1:0] instr,    // subset of machine code (any width you need)
 
-  output logic  loadVal,
-                loadAddr,
-                storeVal,
-                storeAddr,
+  output logic  loadMem,
+                storeMem,
                 regWrite,
                 movInstr,
   output logic[opwidth-1:0] ALUOp,
-  output logic[1:0] Branch
+  output logic[1:0] Branch,
+  output logic[3:0] targetLUT;
   
   );	 
 
@@ -17,12 +16,11 @@ always_comb begin
 // defaults
   ALUOp	=   'b1001;
   Branch =   'b00;
-  loadVal = 'b0;
-  loadAddr = 'b0;
-  storeVal = 'b0;
-  storeAddr = 'b0;
+  loadMem = 'b0;
+  storeMem = 'b0;
   regWrite = 'b0;
   movInstr = 'b0;
+  targetLUT = 'b0000;
   
 
 
@@ -38,54 +36,38 @@ always_comb begin
 
 case(instr)    
 
-  9'b00xxxxxxx: begin     //ALU op
-    ALUOp = {0,instr[8:4]};
-    regWrite  =	'b1;
-  end
-  9'b01xxxxxx0: begin     // MOV
-    ALUOp = 4'b10000;
+  9'b1xxxxxxxx: begin     // mov
+    ALUOp = 4'b1000;
     regWrite  =	'b1;
     movInstr = 'b1;
   end
-  9'b01xxxxxx1: begin     //No - op
-
-  end
-  9'b1000xxxxx: begin     //load-addr
-    loadAddr = 'b1;
+  9'b01xxxxxxx: begin     //ALU op
+    ALUOp = {0,instr[7:4]};
     regWrite  =	'b1;
-  end
-  9'b1001xxxxx: begin     //load-val
-    loadVal = 'b1;
-    regWrite  =	'b1;
-  end
-  9'b1010xxxxx: begin     //store-addr
-    storeAddr = 'b1;
-  end
-  9'b1011xxxxx: begin      //store-val
-    storeVal = 'b1;
-  end
-  9'b1100xxxxx: begin     //jmp
+  end 
+  9'b00100xxxx: begin     //jmp
     Branch = 'b11;
+    targetLUT = instr[3:0];
   end
-  9'b1101xxxxx: begin     //jcnd
+  9'b00101xxxx: begin     //jcnd
     Branch = 'b01;
+    targetLUT = instr[3:0];
   end
-  9'b1101xxxxx: begin     //!jcnd
+  9'b00110xxxx: begin     //!jcnd
     Branch = 'b10;
+    targetLUT = instr[3:0];
+  end
+  9'b00111xxxx: begin     //No- op
+    //do Nothing
+  end
+  9'b00010xxxx: begin     //load
+    loadMem = 'b1;
+    regWrite  =	'b1;
+  end
+  9'b00011xxxx: begin     //store
+    storeMem = 'b1;
   end
 
-
-
-// override defaults with exceptions
-  'b0000:  begin					// store operation
-               MemWrite = 'b1;      // write to data mem
-               regWrite = 'b0;      // typically don't also load reg_file
-			 end
-  'b00001:  ALUOp      = 'b000;  // add:  y = a+b
-  'b00010:  begin				  // load
-			   MemtoReg = 'b1;    // 
-             end
-// ...
 endcase
 
 end

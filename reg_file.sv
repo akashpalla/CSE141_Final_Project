@@ -1,6 +1,6 @@
 // cache memory/register file
 // default address pointer width = 4, for 16 registers
-module reg_file #(parameter pw=3)(
+module reg_file #(parameter pw=4)(
   input[7:0] dat_in,
   input      clk,
   input      wr_en,           // write enable
@@ -18,7 +18,7 @@ module reg_file #(parameter pw=3)(
 	if(movInstr)
 		datA_out = core[addrA];
 	else
-		datA_out = core[addrA];
+		datA_out = core[0];
 	
   	datB_out = core[addrB];
 
