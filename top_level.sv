@@ -72,8 +72,9 @@ logic         sc_in,          //Driven by ALU next Cycle
     .regWrite,
     .movInstr,
     .ALUOp,
-    .Branch
-	 .targetLUT);
+    .Branch,
+	 .targetLUT
+	 );
 
   assign rd_addrA = mach_code[7:4];
   assign rd_addrB = mach_code[3:0];

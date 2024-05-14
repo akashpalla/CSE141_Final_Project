@@ -33,7 +33,7 @@ always_comb begin
           cnd = 'b1;    
       end
       4'b0101: begin     //CEQ
-        if(inA > inB)
+        if(inA == inB)
           cnd = 'b1;
       end
       4'b0110:     
