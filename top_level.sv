@@ -20,7 +20,10 @@ module top_level(
   wire        loadMem,      //Driven by Control
               storeMem,
               regWrite,
-              movInstr;
+              movInstr,
+              invert_sc,
+              update_sc;
+            
   wire[3:0]   ALUOp;
   wire[1:0]   Branch;
   wire[3:0]   targetLUT;
@@ -71,6 +74,8 @@ logic         sc_in,          //Driven by ALU next Cycle
     .storeMem,
     .regWrite,
     .movInstr,
+    .invert_sc,
+    .update_sc,
     .ALUOp,
     .Branch,
 	 .targetLUT
@@ -118,7 +123,14 @@ logic         sc_in,          //Driven by ALU next Cycle
     // pariQ <= pari;
 	  // zeroQ <= zero;
     cnd_in <= cnd_o;
-    sc_in <= sc_o;
+
+    if(update_sc) begin
+      sc_in <= sc_o;
+    end
+
+    if(invert_sc) begin
+      sc_in <= ~sc_in;
+    end
 
 
     // if(sc_clr)

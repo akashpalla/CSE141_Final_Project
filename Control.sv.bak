@@ -6,12 +6,9 @@ module Control #(parameter opwidth = 4, mcodebits = 9)(
                 storeMem,
                 regWrite,
                 movInstr,
-                invert_sc,
-                update_sc,
-                immVal,
   output logic[opwidth-1:0] ALUOp,
   output logic[1:0] Branch,
-  output logic[3:0] targetLUT
+  output logic[3:0] targetLUT;
   
   );	 
 
@@ -23,11 +20,7 @@ always_comb begin
   storeMem = 'b0;
   regWrite = 'b0;
   movInstr = 'b0;
-  invert_sc = 'b0;
-  update_sc = 'b0;
-  immVal = 'b0;
   targetLUT = 'b0000;
-
   
 
 
@@ -51,7 +44,6 @@ case(instr)
   9'b01xxxxxxx: begin     //ALU op
     ALUOp = {0,instr[7:4]};
     regWrite  =	'b1;
-    update_sc = 'b1;
   end 
   9'b00100xxxx: begin     //jmp
     Branch = 'b11;
@@ -65,20 +57,7 @@ case(instr)
     Branch = 'b10;
     targetLUT = instr[3:0];
   end
-  9'b00111xxxx: begin     //imm
-    ALUOp = 4'b1000;
-    regWrite  =	'b1;
-    immVal = 'b1;
-  end
-  9'b00111000: begin     //Clear sc
-    //do Nothing
-    update_sc = 'b1;
-  end
-  9'b00111001: begin     //Invert sc
-    //do Nothing
-    invert_sc = 'b1;
-  end
-  9'b001111111: begin     //No- op
+  9'b00111xxxx: begin     //No- op
     //do Nothing
   end
   9'b00010xxxx: begin     //load

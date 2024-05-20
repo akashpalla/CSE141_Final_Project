@@ -5,6 +5,7 @@ module reg_file #(parameter pw=4)(
   input      clk,
   input      wr_en,           // write enable
 			 movInstr,
+			 immVal,
   input[pw:0] addrA,		  // read address pointers
 			  addrB,
   output logic[7:0] datA_out, // read data
@@ -20,7 +21,10 @@ module reg_file #(parameter pw=4)(
 	else
 		datA_out = core[0];
 	
-  	datB_out = core[addrB];
+	if(immVal)
+		datB_out = immVal
+	else
+ 	 	datB_out = core[addrB];
 
   end
 

@@ -11,6 +11,10 @@ module alu(
 			         zero      // NOR (output)
 );
 
+logic [7:0] b_invert;
+
+assign b_invert = ~inB;
+
 always_comb begin 
   rslt = 'b0;            
   sc_o = 'b0;    
@@ -23,7 +27,7 @@ always_comb begin
       4'b0000:
         {sc_o, rslt} = inA + inB + sc_i;    //ADD
       4'b0001:
-        {sc_o, rslt} = inA - inB + sc_i;    //SUB
+        {sc_o, rslt} = inA + b_invert + 1 - sc_i;    //SUB
       4'b0010:
         {rslt} = inA & inB;   //AND
       4'b0011:
