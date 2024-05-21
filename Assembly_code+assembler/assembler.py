@@ -71,7 +71,7 @@ with open("in.txt", "r") as read, open("out.txt", "w") as write:
             # Determine instruction type and format accordingly
             if inst[0] in rtype:
                 # Type A: 2-bit type (00), 3-bit opcode, 4-bit register input
-                writeline += '00' + opcode[inst[0]] + registers_four_bit[inst[1]]
+                writeline += '01' + opcode[inst[0]] + registers_four_bit[inst[1]]
             elif inst[0] in btype:
                 # Type B: 1-bit type (1), 4-bit output register, 4-bit input register
                 writeline += '1' + registers_four_bit[inst[1][0:-1]] + registers_four_bit[inst[2]]
