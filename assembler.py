@@ -31,19 +31,19 @@ opcode = {
     "lsl": "110",
     "lsr": "111",
     "mov": "00",
-    "load-addr": "0",
+    "load": "0",
     "store": "1",
     "jmp": "00",
     "jcnd": "01",
     "jcnd!": "10",
-    "load-imm": "11"
+    "imm": "11"
 }
 
 # classify instructions into different types
 rtype = ['add', 'sub', 'and', 'xor', 'cmp', 'ceq', 'lsl', 'lsr']
 btype = ['mov']
-ctype = ['load-addr', 'store']
-dtype = ['jmp', 'jcnd', 'jcnd!', 'load-imm']
+ctype = ['load', 'store']
+dtype = ['jmp', 'jcnd', 'jcnd!', 'imm']
 
 comment_char = '#'
 

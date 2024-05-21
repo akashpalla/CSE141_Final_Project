@@ -1,7 +1,7 @@
 // combinational -- no clock
 // sample -- change as desired
 module alu(
-  input[4:0] alu_cmd,    // ALU instructions
+  input[3:0] alu_cmd,    // ALU instructions
   input[7:0] inA, inB,	 // 8-bit wide data path
   input      sc_i,      // shift_carry in
   output logic[7:0] rslt,
@@ -21,6 +21,7 @@ always_comb begin
   cnd =  'b0;
   zero = !rslt;
   pari = ^rslt;
+  rslt = inA;
 
 
     case(alu_cmd)

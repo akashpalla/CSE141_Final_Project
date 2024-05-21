@@ -2,7 +2,6 @@
 module top_level(
   input       clk, 
               reset, 
-              req, 
   output logic done);
 
 
@@ -22,7 +21,8 @@ module top_level(
               regWrite,
               movInstr,
               invert_sc,
-              update_sc;
+              update_sc,
+              immVal;
             
   wire[3:0]   ALUOp;
   wire[1:0]   Branch;
@@ -44,7 +44,8 @@ logic         sc_in,          //Driven by ALU next Cycle
   wire[7:0]   mem_out;        //Driven by Data Mem
   wire[7:0]   register_in;
 
-  wire[3:0] rd_addrA, rd_adrB;    //Set by Machine code
+  wire[3:0] rd_addrA, 
+            rd_addrB;    //Set by Machine code
 
 // lookup table to facilitate jumps/branches
   PC_LUT #(.D(D))
@@ -76,6 +77,7 @@ logic         sc_in,          //Driven by ALU next Cycle
     .movInstr,
     .invert_sc,
     .update_sc,
+    .immVal,
     .ALUOp,
     .Branch,
 	 .targetLUT
@@ -92,6 +94,7 @@ logic         sc_in,          //Driven by ALU next Cycle
               .clk,
               .wr_en(regWrite),
               .movInstr,
+              .immVal,
               .addrA(rd_addrA),
               .addrB(rd_addrB),
               .datA_out(datA),
@@ -108,7 +111,7 @@ logic         sc_in,          //Driven by ALU next Cycle
     .sc_o(sc_o),
     .cnd(cnd_o),
     .pari,
-    .zero,
+    .zero
   );
     
   dat_mem dm1(

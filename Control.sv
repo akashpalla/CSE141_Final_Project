@@ -39,53 +39,51 @@ always_comb begin
 //   ALUOp	    =   'b1001; // Do Nothing
 // // sample values only -- use what you need
 
+casex(instr)    
 
-
-case(instr)    
-
-  9'b1xxxxxxxx: begin     // mov
+  9'b1????????: begin     // mov
     ALUOp = 4'b1000;
     regWrite  =	'b1;
     movInstr = 'b1;
   end
-  9'b01xxxxxxx: begin     //ALU op
-    ALUOp = {0,instr[7:4]};
+  9'b01???????: begin     //ALU op
+    ALUOp = {0,instr[6:4]};
     regWrite  =	'b1;
     update_sc = 'b1;
   end 
-  9'b00100xxxx: begin     //jmp
+  9'b00100????: begin     //jmp
     Branch = 'b11;
     targetLUT = instr[3:0];
   end
-  9'b00101xxxx: begin     //jcnd
+  9'b00101????: begin     //jcnd
     Branch = 'b01;
     targetLUT = instr[3:0];
   end
-  9'b00110xxxx: begin     //!jcnd
-    Branch = 'b10;
-    targetLUT = instr[3:0];
-  end
-  9'b00111xxxx: begin     //imm
+  // 9'b00110xxxx: begin     //!jcnd
+  //   Branch = 'b10;
+  //   targetLUT = instr[3:0];
+  // end
+  9'b00111????: begin     //imm
     ALUOp = 4'b1000;
     regWrite  =	'b1;
     immVal = 'b1;
   end
-  9'b00111000: begin     //Clear sc
+  9'b001100000: begin     //Clear sc
     //do Nothing
     update_sc = 'b1;
   end
-  9'b00111001: begin     //Invert sc
+  9'b001100010: begin     //Invert sc
     //do Nothing
     invert_sc = 'b1;
   end
-  9'b001111111: begin     //No- op
+  9'b001101111: begin     //No- op
     //do Nothing
   end
-  9'b00010xxxx: begin     //load
+  9'b00010????: begin     //load
     loadMem = 'b1;
     regWrite  =	'b1;
   end
-  9'b00011xxxx: begin     //store
+  9'b00011????: begin     //store
     storeMem = 'b1;
   end
 
