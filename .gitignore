@@ -1,0 +1,17 @@
+*.bak
+*.qsf
+*.qws
+*.vo
+*.sdo
+*.do
+*.rpt
+*.xrf
+*.sft
+*.qpf
+in.txt
+out.txt
+db/*
+
+incremental_db/*
+output_files/*
+

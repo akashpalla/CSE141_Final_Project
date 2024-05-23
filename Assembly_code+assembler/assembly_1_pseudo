@@ -1,0 +1,114 @@
+
+//Set all registers to 0
+//except: r9 = 63, r10 = 61, r14 = 16
+
+//max r15
+//min r14
+//mem_loc = r1
+
+//a0 = r2
+//a1 = r3
+
+//b0 = r5
+//b1 = r6
+
+loop_1:
+    load r1
+    mov r2, r0
+    imm 1
+    add r1
+    mov r1, r0
+    load r1
+    mov r3, r0
+    imm 1
+    add r1
+    mov r1, r0
+    // r1 holds next_mem location to read. r2 = a0, r3 = a1
+    mov r4, r1
+
+loop_2:    
+    load r4
+    mov r5, r0
+    imm 1
+    add r4
+    mov r4, r0
+    load r4
+    mov r6, r0
+    imm 1
+    add r4
+    mov r4, r0
+    // r4 holds next mem_location to read. r5 = b0, r6= b1
+
+    mov r0, r2
+    xor r5
+    mov r5, r0
+    mov r0, r3
+    xor r6
+    mov r6, r0
+    //r5 = c0, r6 = c1
+
+    imm 0
+    mov r8, r0
+    mov r7, r0
+loop_3:
+    //r7 = k
+    //r8 = count
+    imm 1
+    and r5
+    add r8
+    mov r8, r0
+    imm 1
+    and r6
+    add r8
+    mov r8, r0
+
+    lsr r5
+    clear
+    mov r5, r0
+    lsr r6
+    clear
+    mov r6, r0
+    
+    //Check if k < 8
+    imm 1
+    add r7
+    mov r7, r0
+    imm 7
+    cmp r7
+    jcnd exit_loop_3
+    jmp loop_3
+
+exit_loop_3:
+    mov r0, r8
+    cmp r15
+
+    jcnd skip_max
+    mov r15, r8
+
+skip_max:
+    mov r0, r8
+    cmp r14
+    jcnd! skip_min
+    mov r14, r8
+
+skip_min:
+    
+    //Check if next read adress of b, r4 > 62
+    mov r0, r9 
+    cmp r4
+    jcnd exit_loop_2
+    jmp loop_2
+
+exit_loop_2
+    //Check if next read adress of a r1 > 60
+    mov r0, r10
+    cmp r1
+    jcnd exit_loop_1
+    jmp loop_1
+exit_loop_1
+
+
+    [60, 61 , 62, 63]
+
+    
+
