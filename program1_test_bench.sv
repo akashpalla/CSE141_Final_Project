@@ -35,6 +35,42 @@ module test_bench;
 	end
     D1.sc_in =0;
   
+//Register Preloads
+
+D1.rf1.core[0] = 0;
+D1.rf1.core[1] = 0;
+D1.rf1.core[2] = 0;
+D1.rf1.core[3] = 0;
+D1.rf1.core[4] = 0;
+D1.rf1.core[5] = 0;
+D1.rf1.core[6] = 0;
+D1.rf1.core[7] = 0;
+D1.rf1.core[8] = 0;
+D1.rf1.core[9] = 63;
+D1.rf1.core[10] = 61;
+D1.rf1.core[11] = 0;
+D1.rf1.core[12] = 0;
+D1.rf1.core[13] = 0;
+D1.rf1.core[14] = 16;
+D1.rf1.core[15] = 0;
+
+D1.pl1.core[0] = 0;
+D1.pl1.core[1] = 37;
+D1.pl1.core[2] = 64;
+D1.pl1.core[3] = 72;
+D1.pl1.core[4] = 79;
+D1.pl1.core[5] = 16;
+D1.pl1.core[6] = 14;
+D1.pl1.core[7] = 1;
+D1.pl1.core[8] = 0;
+D1.pl1.core[9] = 0;
+D1.pl1.core[10] = 0;
+D1.pl1.core[11] = 0;
+D1.pl1.core[12] = 0;
+D1.pl1.core[13] = 0;
+D1.pl1.core[14] = 0;
+D1.pl1.core[15] = 0;
+
 // TODO: delete DUT data memory preloads beyond [63] (next 3 lines of code)
     D1.dm1.core[64] = 'd16;		             // preset DUT final Min to max possible
     for(int r=65; r<256; r++)

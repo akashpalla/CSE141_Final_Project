@@ -88,7 +88,7 @@ logic         sc_in,          //Driven by ALU next Cycle
 
   assign register_in = loadMem ? mem_out : alu_out;
 
-  reg_file #(.pw(3)) rf1(
+  reg_file #(.pw(4)) rf1(
               
               .dat_in(register_in),	   // loads, most ops
               .clk,

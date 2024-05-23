@@ -27,7 +27,7 @@ opcode = {
     "and": "010",
     "xor": "011",
     "cmp": "100",
-    "ceq": "101",
+    # "ceq": "101",
     "lsl": "110",
     "lsr": "111",
     "mov": "00",
@@ -36,7 +36,10 @@ opcode = {
     "jmp": "00",
     "jcnd": "01",
     "jcnd!": "10",
-    "imm": "11"
+    "imm": "11",
+    "nop": "011010000",
+    "invert": "011010011",
+    "clear": "011011111"
 }
 
 # classify instructions into different types
@@ -44,10 +47,12 @@ rtype = ['add', 'sub', 'and', 'xor', 'cmp', 'ceq', 'lsl', 'lsr']
 btype = ['mov']
 ctype = ['load', 'store']
 dtype = ['jmp', 'jcnd', 'jcnd!', 'imm']
+special_type = ['nop', 'invert', 'clear']
+
 
 comment_char = '#'
 
-with open("in.txt", "r") as read, open("out.txt", "w") as write:
+with open("in.txt", "r") as read, open("simulation/modelsim/mach_code.txt", "w") as write:
     # read lines from input file
     lines = read.readlines()
 
@@ -69,7 +74,9 @@ with open("in.txt", "r") as read, open("out.txt", "w") as write:
         # write the opcode
         if inst[0] in opcode:
             # Determine instruction type and format accordingly
-            if inst[0] in rtype:
+            if inst[0] in special_type:
+                writeline += opcode[inst[0]]
+            elif inst[0] in rtype:
                 # Type A: 2-bit type (00), 3-bit opcode, 4-bit register input
                 writeline += '01' + opcode[inst[0]] + registers_four_bit[inst[1]]
             elif inst[0] in btype:
@@ -83,9 +90,9 @@ with open("in.txt", "r") as read, open("out.txt", "w") as write:
                 writeline += '001' + opcode[inst[0]] + format(int(inst[1]), '04b')
             else:
                 # If it is an instruction that doesn't exist, exit
-                sys.exit("Unknown instruction")
+                sys.exit("Unknown instruction 1")
         else:
-            sys.exit("Unknown instruction")
+            sys.exit("Unknown instruction 2")
 
         # SystemVerilog ignores comments prepended with // with readmemb or readmemh
         writeline += ' //' + comment if comment else ''

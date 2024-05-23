@@ -40,11 +40,12 @@ always_comb begin
       4'b0101: begin     //CEQ
         if(inA == inB)
           cnd = 'b1;
+        //Shouldnt be executed
       end
       4'b0110:     
-        {sc_o,rslt} = {inA, sc_i};    //LSL
+        {sc_o,rslt} = {inB, sc_i};    //LSL
       4'b0111: begin
-        {rslt,sc_o} = {sc_i,inA};   //LSR
+        {rslt,sc_o} = {sc_i,inB};   //LSR
       end
       4'b1000: 
         {rslt} = {inB};      //MOV
@@ -53,3 +54,4 @@ always_comb begin
 end
    
 endmodule
+//01 0100 xxxx

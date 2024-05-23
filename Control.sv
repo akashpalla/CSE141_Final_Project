@@ -46,8 +46,17 @@ casex(instr)
     regWrite  =	'b1;
     movInstr = 'b1;
   end
+  9'b011010000: begin     //No- op
+    //do Nothing
+  end
+  9'b011011111: begin     //Clear sc
+    update_sc = 'b1;
+  end
+  9'b011010011: begin     //Invert sc
+    invert_sc = 'b1;
+  end
   9'b01???????: begin     //ALU op
-    ALUOp = {0,instr[6:4]};
+    ALUOp = {1'b0,instr[6:4]};
     regWrite  =	'b1;
     update_sc = 'b1;
   end 
@@ -59,25 +68,14 @@ casex(instr)
     Branch = 'b01;
     targetLUT = instr[3:0];
   end
-  // 9'b00110xxxx: begin     //!jcnd
-  //   Branch = 'b10;
-  //   targetLUT = instr[3:0];
-  // end
+  9'b00110xxxx: begin     //!jcnd
+    Branch = 'b10;
+    targetLUT = instr[3:0];
+  end
   9'b00111????: begin     //imm
     ALUOp = 4'b1000;
     regWrite  =	'b1;
     immVal = 'b1;
-  end
-  9'b001100000: begin     //Clear sc
-    //do Nothing
-    update_sc = 'b1;
-  end
-  9'b001100010: begin     //Invert sc
-    //do Nothing
-    invert_sc = 'b1;
-  end
-  9'b001101111: begin     //No- op
-    //do Nothing
   end
   9'b00010????: begin     //load
     loadMem = 'b1;
