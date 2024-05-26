@@ -1,116 +1,143 @@
-//Set all registers to 0
-
-//r9 = 60, r10 = 62
-//r12 = minArithDifferenceHigh
-//r13 = minArithDifferenceLow
-//r14 = maxArithDifferenceHigh
-//r15 = maxArithDifferenceLow
-
-//r1 = mem Index for a's
-//r2 = a0
-//r3 = a1
-
-loop_1:
-    load r1
-    mov r2, r0
-    imm 1
-    add r1
-    mov r1, r0
-    load r1
-    mov r3, r0
-    imm 1
-    add r1
-    mov r1, r0
-    mov r4, r1
-
-//r4 = mem INdex for b'skip_max
-//r5 = b0
-//r6 = b1
-
-loop_2:
-    load r4
-    mov r5, r0
-    imm 1
-    add r4
-    mov r4, r0
-    load r4
-    mov r6, r0
-    imm 1
-    add r4
-    mov r4, r0
-
-//Calculate maxArithDifference
-//r7 = lowDiff
-//r8 = highDiff
-    mov r0, r6
-    sub r3
-    mov r7, r0
-    invert
-    mov r0, r5
-    sub r2
-    mov r8, r0
-    jcnd! continue                // Find 2's comp if 
-    clear
-    imm 0
-    sub r8
-    mov r8, r0
-    clear
-    imm 0
-    sub r7
-    mov r7, r0
-
-continue:
-    clear
-
-    mov r0, r14             //Compare currentDiff w/ Max Diff
-    cmp r8
-    jcnd skip_max
-    mov r14, r8
-    
-    mov r0, r15
-    cmp r7
-    jcnd skip_max
-    mov r15, r7
-skip_max:
-
-    mov r0, r12              //Compare currentDiff w/ min Diff
-    cmp r8
-    jcnd! skip_min
-    mov r12, r8
-
-    mov r0, r13
-    cmp r7
-    jcnd! skip_min
-    mov r13, r7
-skip_min:                   
-    //Check if next read adress of b, r4 > 62
-    mov r0, r9
-    cmp r4
-    jcnd exit_loop_2
-    jmp loop_2
-
-exit_loop_2
-    //Check if next read adress of a r1 > 60
-    mov r0, r10
-    cmp r1
-    jcnd exit_loop_1
-    jmp loop_1
-
-exit_loop_1
-
-
-//Save results to Mem
-imm 2
-add r10
-mov r10, r0
-mov r0, r7
-store r10
+nop
+nop
+load r1
+mov r2, r0
 imm 1
-add r10
-mov r10, r0
+add r1
+mov r1, r0
+load r1
+mov r3, r0
+imm 1
+add r1
+mov r1, r0
+mov r4, r1
+nop
+nop
+nop
+nop
+load r4
+mov r5, r0
+imm 1
+add r4
+mov r4, r0
+load r4
+mov r6, r0
+imm 1
+add r4
+mov r4, r0
+clear           
+mov r0, r3      //Subtraction
+sub r6
+mov r7, r0
+invert
+mov r0, r2
+sub r5
+mov r8, r0      //End subtraction
+mov r0, r11         //Check if need to invert
+cmp r2  
+jcnd 12     // jmp if A is positive
+mov r0, r11
+cmp r5
+jcnd 14      //jmp if B is positive (A neg, B pos)
+jmp 13      //jmp if A and B are negative
+nop
+nop         
+nop
+mov r0, r11
+cmp r5  
+jcnd 13     //Jmp if A and B are positive
+jmp 15                      //Finish if A is positive B is negative 
+nop
+nop         
+nop
+mov r0, r8              //Check if answer is negative
+and r11
+cmp r10
+jcnd 14             //Answer is negative, invert
+jmp 15                 //Answer is positive, its food
+nop
+nop
+nop
+clear
+imm 0 
+sub r7
+mov r7, r0
+invert 
+imm 0
+sub r8
+mov r8, r0
+nop
+nop     //Check whether to update max value
+nop
 mov r0, r8
-store r10
-
-
-
-
+cmp r15
+jcnd 7       // go Update max value
+mov r0, r15
+cmp r8
+jcnd 10            // 1 if MAX_HIGH > r8 
+mov r0, r14
+cmp r7          // 1 if MAX_LOW > r7
+jcnd 10
+nop
+nop     //Update Max value
+nop
+mov r15, r8
+mov r14, r7
+nop
+nop     //Check whether to update minimum value
+nop
+mov r0, r13
+cmp r8
+jcnd 8
+mov r0, r8
+cmp r13
+jcnd 9
+mov r0, r7
+cmp r12
+jcnd 9
+nop
+nop         //Update min value
+nop
+mov r13, r8
+mov r12, r7
+nop
+nop     
+nop
+mov r0, r9
+cmp r4
+jcnd 11     // Jump to start of loop_2
+nop
+nop
+nop
+imm 2
+mov r4, r0
+mov r0, r9
+clear
+sub r4
+clear
+cmp r1
+jcnd 6      //Jump to start of loop_1
+imm 3        //Save min and max to memeory
+add r9
+mov r9, r0
+mov r0, r13
+store r9
+imm 1
+add r9
+mov r9, r0
+mov r0, r12
+store r9
+imm 1 
+add r9
+mov r9, r0
+mov r0, r15
+store r9
+imm 1 
+add r9
+mov r9, r0
+mov r0, r14
+store r9
+nop
+nop
+nop
+nop

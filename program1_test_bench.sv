@@ -36,6 +36,7 @@ module test_bench;
     D1.sc_in =0;
   
 //Register Preloads
+$readmemb("mach_code_1.txt",D1.ir1.core);
 
 D1.rf1.core[0] = 0;
 D1.rf1.core[1] = 0;

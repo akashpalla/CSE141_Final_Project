@@ -52,7 +52,7 @@ special_type = ['nop', 'invert', 'clear']
 
 comment_char = '#'
 
-with open("in.txt", "r") as read, open("simulation/modelsim/mach_code.txt", "w") as write:
+with open("in.txt", "r") as read, open("simulation/modelsim/mach_code_2.txt", "w") as write:
     # read lines from input file
     lines = read.readlines()
 
@@ -70,7 +70,7 @@ with open("in.txt", "r") as read, open("simulation/modelsim/mach_code.txt", "w")
 
         # initialize the string that contains the machine code binary
         writeline = ''
-
+        print(line)
         # write the opcode
         if inst[0] in opcode:
             # Determine instruction type and format accordingly
