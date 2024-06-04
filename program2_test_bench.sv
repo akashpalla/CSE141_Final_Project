@@ -1,4 +1,5 @@
 // program 2    CSE141L   min & max arithmetic distances in double precision data pairs
+// this version repeats Program 1 four times, reading in four sets of incoming data
 module test_bench;
 
 // connections to DUT: clock, start (request), done (acknowledge) 
@@ -17,25 +18,41 @@ module test_bench;
 		 .reset(start),
 		 .done (done )); 
 
-  always begin
-    #50ns clk = 'b1;
-	#50ns clk = 'b0;
-  end
+always begin
+  #50ns clk = 'b1;
+  #50ns clk = 'b0;
+end
 
-  initial begin
+// number of tests
+int itrs = 10;
+
+initial begin
 // load operands for program 1 into data memory
 // 32 double-precision operands go into data_mem [0:63]
 // first operand = {data_mem[0],data_mem[1]}  
 //   endian order doesn't matter for program 1, as long as consistent for all values (why?)
+  for(int loop_ct=0; loop_ct<itrs; loop_ct++) begin
     #100ns;
 	Min = 'hffff;						     // start test bench Min at max value
 	Max = 'h0;						         // start test bench Max at min value
+    case(loop_ct)
+        0: $readmemb("test0.txt",D1.dm1.core);
+	    1: $readmemb("test1.txt",D1.dm1.core);
+        2: $readmemb("test2.txt",D1.dm1.core);
+	    3: $readmemb("test3.txt",D1.dm1.core);
+        4: $readmemb("test4.txt",D1.dm1.core);
+        5: $readmemb("test5.txt",D1.dm1.core);
+        6: $readmemb("test6.txt",D1.dm1.core);
+	    7: $readmemb("test7.txt",D1.dm1.core);
+        8: $readmemb("test8.txt",D1.dm1.core);
+        9: $readmemb("test9.txt",D1.dm1.core);
+    endcase
     for(int i=0; i<32; i++) begin
-      {D1.dm1.core[2*i],D1.dm1.core[2*i+1]} = $random;  // or try other values
       Tmp[i] = {D1.dm1.core[2*i],D1.dm1.core[2*i+1]};	  // load values into mem, copy to Tmp array
-      $display("%d:  %d %b",i,Tmp[i], Tmp[i]);
+      $display("%d:  %d",i,Tmp[i]);
 	end
 
+    //Register Preloads
     $readmemb("mach_code_2.txt",D1.ir1.core);
     D1.sc_in =0;
     D1.rf1.core[0] = 0;
@@ -71,6 +88,8 @@ module test_bench;
     D1.pl1.core[13] = 51;
     D1.pl1.core[14] = 59;
     D1.pl1.core[15] = 70;
+
+    
 // do not preload core[64:65] -- these are used by program 1
     D1.dm1.core[66] = 'hffff;		         // preset DUT final Min to max possible
     D1.dm1.core[67] = 'hffff;
@@ -92,7 +111,7 @@ module test_bench;
         end
 	  end
     end   
-	#200ns start = 'b0; 
+	  #200ns start = 'b0; 
     #200ns wait (done);						 // avoid false done signals on startup
 
 // check results in data_mem[66:67] and [68:69] (Minimum and Maximum distances, respectively)
@@ -109,11 +128,10 @@ module test_bench;
 							  $display("Max valu = %d, %d",Tmp[Max1], Tmp[Max2]);
 							  //{D1.dm1.core[2*Max1],D1.dm1.core[2*Max1+1]},{D1.dm1.core[2*Max2],D1.dm1.core[2*Max2+1]});
     #200ns start = 'b1;
-// to do: load operands for program 2 into data memory (reuse program 1 operands is fine here)
+    if(loop_ct==itrs-1) $stop;
 	#200ns start = 'b0;
-	$stop;
   end
-
+end
 // magnitude of distance between two 16-bit numbers 
   function[15:0] abs(input signed[15:0] a, b);
                  diff = a-b;      	   // raw difference (two's comp)
