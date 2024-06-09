@@ -52,7 +52,7 @@ special_type = ['nop', 'invert', 'clear']
 
 comment_char = '#'
 
-with open("in.txt", "r") as read, open("simulation/modelsim/mach_code_2.txt", "w") as write:
+with open("in.txt", "r") as read, open("simulation/modelsim/mach_code_3.txt", "w") as write:
     # read lines from input file
     lines = read.readlines()
 
