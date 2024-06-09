@@ -55,10 +55,19 @@ casex(instr)
   9'b011010011: begin     //Invert sc
     invert_sc = 'b1;
   end
-  9'b01???????: begin     //ALU op
+    9'b0111?????: begin     //ALU op 1
     ALUOp = {1'b0,instr[6:4]};
     regWrite  =	'b1;
     update_sc = 'b1;
+  end 
+    9'b0100?????: begin     //ALU op 2
+    ALUOp = {1'b0,instr[6:4]};
+    regWrite  =	'b1;
+    update_sc = 'b1;
+  end 
+  9'b01???????: begin     //ALU op 3
+    ALUOp = {1'b0,instr[6:4]};
+    regWrite  =	'b1;
   end 
   9'b00100????: begin     //jmp
     Branch = 'b11;

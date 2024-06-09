@@ -1,0 +1,244 @@
+nop
+nop
+nop
+load r1
+mov r3, r0
+imm 1
+add r1
+mov r1, r0
+load r1
+mov r2, r0      //load top operands
+imm 0
+mov r8, r0     //Set accumulators to 0 
+mov r9, r0
+mov r10, r0
+mov r11, r0
+clear           
+lsl r3
+imm 0  
+sub r0
+mov r4, r0          //Sign extend top operand
+mov r5, r0
+clear
+nop
+nop         //Load r6 with LSB
+nop
+imm 2
+add r1
+mov r1, r0
+load r1
+mov r6, r0
+clear
+imm 1
+mov r13, r0
+nop
+nop     //Iteration 1
+nop
+lsr r6
+mov r6, r0
+imm 0
+sub r0
+mov r12, r0         //R12 holds 11111 or 00000, iter 1
+clear
+and r2
+add r8
+mov r8, r0
+mov r0, r12
+and r3
+add r9
+mov r9, r0
+mov r0, r12
+and r4
+add r10
+mov r10, r0
+mov r0, r12
+and r5
+add r11
+mov r11, r0
+clear
+imm 1
+add r13
+mov r13, r0
+nop
+nop     //Iteration 2-8
+nop
+lsr r6
+mov r6, r0
+imm 0
+sub r0
+mov r12, r0         //R12 holds 11111 or 00000, iter 1
+clear
+lsl r2
+mov r2, r0
+lsl r3
+mov r3, r0
+lsl r4
+mov r4, r0
+lsl r5
+mov r5, r0
+clear
+mov r0, r12
+and r2
+add r8
+mov r8, r0
+mov r0, r12
+and r3
+add r9
+mov r9, r0
+mov r0, r12
+and r4
+add r10
+mov r10, r0
+mov r0, r12
+and r5
+add r11
+mov r11, r0
+clear
+imm 1
+add r13
+mov r13, r0
+imm 9
+cmp r13
+jcnd 1
+nop
+nop     // Load in r6 with MSB
+nop
+imm 1
+mov r13, r0
+mov r0, r1
+sub r13
+mov r1, r0
+load r1
+mov r6, r0
+clear
+imm 1
+mov r13, r0
+nop
+nop     //Iteration 9-16
+nop
+lsr r6
+mov r6, r0
+imm 0
+sub r0
+mov r12, r0         //R12 holds 11111 or 00000, iter 1
+clear
+lsl r2
+mov r2, r0
+lsl r3
+mov r3, r0
+lsl r4
+mov r4, r0
+lsl r5
+mov r5, r0
+clear
+mov r0, r12
+and r2
+add r8
+mov r8, r0
+mov r0, r12
+and r3
+add r9
+mov r9, r0
+mov r0, r12
+and r4
+add r10
+mov r10, r0
+mov r0, r12
+and r5
+add r11
+mov r11, r0
+clear
+imm 1
+add r13
+mov r13, r0
+imm 9
+cmp r13
+jcnd 2
+nop
+nop //load in R6 either 11111 or 00000
+nop 
+load r1
+lsl r0
+imm 0 
+sub r0
+mov r6, r0
+clear
+imm 1
+mov r13, r0
+lsr r6
+imm 0
+sub r0
+mov r12, r0         //R12 holds 11111 or 00000, iter 1
+clear
+nop 
+nop         //Iteration 17 - 32
+nop
+lsl r2
+mov r2, r0
+lsl r3
+mov r3, r0
+lsl r4
+mov r4, r0
+lsl r5
+mov r5, r0
+clear
+mov r0, r12
+and r2
+add r8
+mov r8, r0
+mov r0, r12
+and r3
+add r9
+mov r9, r0
+mov r0, r12
+and r4
+add r10
+mov r10, r0
+mov r0, r12
+and r5
+add r11
+mov r11, r0
+clear
+imm 1
+add r13
+mov r13, r0
+imm 15
+mov r6, r0
+imm 2
+add r6
+cmp r13
+jcnd 3
+nop
+nop     //Save results 
+nop
+clear
+mov r0, r11
+store r14
+imm 1
+add r14
+mov r14, r0
+mov r0, r10
+store r14
+imm 1
+add r14
+mov r14, r0
+mov r0, r9
+store r14
+imm 1
+add r14
+mov r14, r0
+mov r0, r8
+store r14
+imm 1
+add r14
+mov r14, r0
+nop
+nop
+imm 2
+add r1
+mov r1, r0
+cmp r15
+jcnd! 4
+nop
+nop
+nop

@@ -42,14 +42,14 @@ jcnd 14      //jmp if B is positive (A neg, B pos)
 jmp 13      //jmp if A and B are negative
 nop
 nop         
-nop
+clear
 mov r0, r11
 cmp r5  
 jcnd 13     //Jmp if A and B are positive
 jmp 15                      //Finish if A is positive B is negative 
 nop
 nop         
-nop
+clear
 mov r0, r8              //Check if answer is negative
 and r11
 cmp r10
@@ -68,7 +68,7 @@ sub r8
 mov r8, r0
 nop
 nop     //Check whether to update max value
-nop
+clear
 mov r0, r8
 cmp r15
 jcnd 7       // go Update max value
@@ -80,12 +80,12 @@ cmp r7          // 1 if MAX_LOW > r7
 jcnd 10
 nop
 nop     //Update Max value
-nop
+clear
 mov r15, r8
 mov r14, r7
 nop
 nop     //Check whether to update minimum value
-nop
+clear
 mov r0, r13
 cmp r8
 jcnd 8
@@ -97,18 +97,18 @@ cmp r12
 jcnd 9
 nop
 nop         //Update min value
-nop
+clear
 mov r13, r8
 mov r12, r7
 nop
 nop     
-nop
+clear
 mov r0, r9
 cmp r4
 jcnd 11     // Jump to start of loop_2
 nop
 nop
-nop
+clear
 imm 2
 mov r4, r0
 mov r0, r9

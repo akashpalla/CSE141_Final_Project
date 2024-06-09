@@ -142,6 +142,6 @@ logic         sc_in,          //Driven by ALU next Cycle
     //   sc_in <= sc_o;
   end
 
-  assign done = prog_ctr == 150;
+  assign done = prog_ctr == 500;
  
 endmodule

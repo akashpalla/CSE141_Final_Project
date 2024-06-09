@@ -117,7 +117,7 @@ initial begin
 // check results in data_mem[66:67] and [68:69] (Minimum and Maximum distances, respectively)
     if(Min == {D1.dm1.core[66],D1.dm1.core[67]}) 
                               $display("good Min = %d",Min);     // your DUT put correct answer into core[66:67]
-	else                      $display("fail Min = %d",Min);	 // your DUT put wrong answer into core[66:67]
+	else                      $display("fail Min = %d",D1.dm1.core[67]);	 // your DUT put wrong answer into core[66:67]
                               $display("Min addr = %d, %d",Min1, Min2);
 							  $display("Min valu = %d %d",Tmp[Min1], Tmp[Min2]);
 							  //{D1.dm1.core[2*Min1],D1.dm1.core[2*Min1+1]},{D1.dm1.core[2*Min2],D1.dm1.core[2*Min2+1]});
